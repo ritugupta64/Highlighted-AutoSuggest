@@ -10,6 +10,7 @@ export default function Header() {
       <Toolbar className="headerContainer">
        
         <NavLink exact to="/" activeClassName = "is_active">Login</NavLink>
+        <NavLink exact to="/Highlighted-AutoSuggest" activeClassName = "is_active">Login</NavLink>
         
         <NavLink to="/search" activeClassName = "is_active">Search</NavLink>
       </Toolbar>
