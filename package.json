@@ -2,7 +2,7 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://ritugupta64.github.io/react-gh-pages",
+  "homepage": "http://ritugupta64.github.io/Highlighted-AutoSuggest",
   "dependencies": {
     "@material-ui/core": "^4.5.0",
     "autosuggest-highlight": "^3.1.1",

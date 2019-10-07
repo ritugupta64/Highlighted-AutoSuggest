@@ -6,7 +6,7 @@ export function PostData(userDetails) {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      boody: JSON.stringify(userDetails)
+      body: JSON.stringify(userDetails)
     })
       .then(response => response.json())
       .then(rj => {

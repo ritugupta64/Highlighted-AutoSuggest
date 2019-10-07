@@ -1,57 +1,68 @@
 import React, { Component } from "react";
-import axios from "axios";
+// import axios from "axios";
 import Button from "@material-ui/core/Button";
-import {PostData} from "../Services/postData";
+import { PostData } from "../Services/postData";
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 class LoginUI extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userName: "",
-      password: ""
+      passwordEntered: "",
+      isLoggedIn: false,
+      isloading: false
     };
   }
 
-  onInputChange = e => {
+  onUserNameChange = e => {
     this.setState({
-      [e.target.name]: e.target.value
+      userName: e.target.value
     });
   };
 
-  // login = user => {
-  //   return axios
-  //     .post("https://swapi.co/api/people", {
-  //       userName: user.name,
-  //       password: user.birth_year
-  //     })
-  //     .then(response => {
-  //       localStorage.setItem("usertoken", response.data);
-  //       return response.data;
-  //     })
-
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
+  onPasswordChange = e => {
+    this.setState({
+      passwordEntered: e.target.value
+    });
+  };
 
   onInputSubmit = e => {
     e.preventDefault();
-    // const loginDetails = {
-    //   userName: this.state.userName,
-    //   password: this.state.password
-    // };
-
-    // this.login(loginDetails).then(res => {
-    //   if (res) {
-    //     console.log(res);
-    //     this.props.history.push("/search");
-    //   }
-    // });
-   // console.log(this.state)
-    PostData(this.state).then((result) => {
-      let responseJson = result
-      console.log(responseJson)
+    this.setState({
+      isloading: true
     })
+
+    PostData(this.state).then(result => {
+      document.getElementById("status").innerHTML =  null
+      let responseJson = result;
+      const user = responseJson.results;
+      // const password = responseJson.results[0].birth_year;
+      // console.log(user)
+      const userName = this.state.userName;
+      //console.log(userName)
+      const passwordEntered = this.state.passwordEntered;
+
+      if (userName === "" && passwordEntered === "") {
+        document.getElementById("status").innerHTML =
+          "<p>Please Enter a valid Username and Password</p>";
+          this.setState({
+            isloading: false
+          })
+      } else {
+        for (var i in user) {
+          if (
+            user[i].name === userName &&
+            user[i].birth_year === passwordEntered
+          ) {
+            console.log("valid");
+            document.getElementById("status").innerHTML =  null;
+            this.props.history.push("/search");
+          }
+        }
+      }
+    });
   };
 
   render() {
@@ -63,9 +74,9 @@ class LoginUI extends Component {
           <label htmlFor="userName">User Name</label>
           <input
             type="text"
-            name={this.state.userName}
+            value={this.state.userName}
             id="userName"
-            onChange={this.onInputChange}
+            onChange={this.onUserNameChange}
           />
         </div>
 
@@ -73,12 +84,13 @@ class LoginUI extends Component {
           <label htmlFor="password">Password</label>
           <input
             type="password"
-            name={this.state.password}
+            value={this.state.passwordEntered}
             id="password"
-            onChange={this.onInputChange}
+            onChange={this.onPasswordChange}
           />
         </div>
 
+        <span className="validation" id="status"></span>
         <Button
           variant="contained"
           color="primary"
@@ -86,6 +98,9 @@ class LoginUI extends Component {
         >
           Login
         </Button>
+       {
+         this.state.isloading ?  <CircularProgress className="progress" /> : null }
+       
       </div>
     );
   }
